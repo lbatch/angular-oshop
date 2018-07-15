@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Oshop
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
@@ -25,3 +26,7 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+=======
+# angular-tutorial
+Store website created in Angular during the Udemy Complete Angular Master Class (Mosh Hamedani) course.
+>>>>>>> f0bf95d73c59425362e19edc8e68e35614e56af9
