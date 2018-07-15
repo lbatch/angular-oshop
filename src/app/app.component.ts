@@ -1,3 +1,6 @@
+import { UserService } from './user.service';
+import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 
 @Component({
@@ -6,5 +9,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'app';
+  constructor(private userService: UserService, private auth: AuthService, router: Router) {
+    auth.user$.subscribe(user => {
+      if (user) {
+          userService.save(user);
+
+        const returnUrl = localStorage.getItem('returnUrl');
+        router.navigateByUrl(returnUrl);
+      }
+    });
+  }
 }
