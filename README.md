@@ -15,7 +15,7 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-NOTE: Currently, when using --prod flag, you need to also include --aot=false and --build-optimizer=false, due to an issue detailed at https://github.com/angular/angular/issues/23609/23609
+NOTE: Currently, when using --prod flag, you need to also include --aot=false and --build-optimizer=false, due to an issue detailed at https://github.com/angular/angular/issues/23609
 
 ## Running unit tests
 
