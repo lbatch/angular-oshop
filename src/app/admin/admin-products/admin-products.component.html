@@ -1,3 +1,34 @@
 <p>
-  admin-products works!
+    <a routerLink="/admin/products/new" class="btn btn-primary">New Product</a>
 </p>
+
+<div>
+    <mat-form-field>
+      <input matInput (keyup)="filter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+</div>
+
+<div class="mat-elevation-z8">
+
+<table mat-table [dataSource]="filteredProducts">
+  <ng-container matColumnDef="title">
+    <th mat-header-cell *matHeaderCellDef>Title</th>
+    <td mat-cell *matCellDef="let row">{{row.payload.val().title}}</td>
+  </ng-container>
+  <ng-container matColumnDef="price">
+    <th mat-header-cell *matHeaderCellDef>Price</th>
+    <td mat-cell *matCellDef="let row">{{row.payload.val().price}}</td>
+   </ng-container>
+   <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row"><a [routerLink]="['/admin/products/', row.key]">Edit</a></td>
+    </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+  </tr>
+</table>
+
+<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+
+</div>

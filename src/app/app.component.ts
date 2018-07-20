@@ -2,6 +2,7 @@ import { UserService } from './user.service';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 import { Component } from '@angular/core';
+import 'hammerjs';
 
 @Component({
   selector: 'app-root',
