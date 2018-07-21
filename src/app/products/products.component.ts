@@ -1,7 +1,6 @@
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { CategoryService } from './../category.service';
 import { ProductService } from './../product.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Product } from '../models/product';
@@ -14,14 +13,12 @@ import { Product } from '../models/product';
 export class ProductsComponent implements OnDestroy {
   products: Product[];
   filteredProducts: Product[];
-  categories$;
   category: string;
   subscription: Subscription;
 
   constructor(
     route: ActivatedRoute,
-    productService: ProductService,
-    categoryService: CategoryService) {
+    productService: ProductService) {
 
     this.subscription = route.queryParamMap.subscribe(params => {
       this.category = params.get('category');
@@ -35,8 +32,6 @@ export class ProductsComponent implements OnDestroy {
           this.products.filter(p => p.value.category === this.category) :
           this.products;
     });
-
-    this.categories$ = categoryService.getAll();
   });
 }
 

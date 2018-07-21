@@ -1,8 +1,10 @@
-import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProductService } from './../../product.service';
 import { CategoryService } from './../../category.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Product } from '../../models/product';
 
 @Component({
   selector: 'app-product-form',
@@ -12,7 +14,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 export class ProductFormComponent implements OnDestroy {
   categories$;
   product = {};
-  snapshotChanges;
+  subscription: Subscription;
   id;
 
   constructor(
@@ -23,8 +25,10 @@ export class ProductFormComponent implements OnDestroy {
     this.categories$ = categoryService.getAll();
     this.id = this.route.snapshot.paramMap.get('id');
     if (this.id) {
-      this.snapshotChanges = this.productService.get(this.id).snapshotChanges()
-        .subscribe(p => this.product = p.payload.val());
+      this.subscription = this.productService.get(this.id).snapshotChanges()
+        .subscribe(p => {
+            this.product = {key: this.id, value: p.payload.val()};
+        });
     }
 
   }
@@ -47,8 +51,8 @@ export class ProductFormComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.snapshotChanges) {
-      this.snapshotChanges.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 
