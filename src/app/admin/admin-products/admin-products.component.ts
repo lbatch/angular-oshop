@@ -1,3 +1,5 @@
+import { map } from 'rxjs/operators';
+import { Product } from './../../models/product';
 import { ProductService } from './../../product.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -10,18 +12,21 @@ import { MatPaginator, MatTableDataSource } from '@angular/material';
 })
 export class AdminProductsComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['title', 'price', 'edit'];
-  products: any[];
-  filteredProducts: any[];
+  products: Product[];
+  filteredProducts: Product[];
   subscription: Subscription;
 
   constructor(private productService: ProductService) {
-    this.subscription = this.productService.getAll()
-      .subscribe(products => this.filteredProducts = this.products = products);
+    this.subscription =  productService.getAll().pipe(
+      map(products => {
+        return products.map(product => <Product>({key: product.key, value: product.payload.val()}));
+      })
+    ).subscribe(products => this.filteredProducts = this.products = products);
   }
 
   filter(query: string) {
     this.filteredProducts = (query) ?
-      this.products.filter(p => p.payload.val().title.toLowerCase().includes(query.toLowerCase())) :
+      this.products.filter(p => p.value.title.toLowerCase().includes(query.toLowerCase())) :
       this.products;
   }
 
