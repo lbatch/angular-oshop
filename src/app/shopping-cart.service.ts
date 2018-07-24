@@ -22,6 +22,21 @@ export class ShoppingCartService {
     });
   }
 
+  async removeFromCart(product: Product) {
+    const cartId = await this.getOrCreateCartId();
+    const item = this.getItem(cartId, product.key);
+    item.snapshotChanges().pipe(take(1)).subscribe(i => {
+      if (i.payload.val()) {
+        const quantity = i.payload.val().quantity;
+        if (quantity > 1) {
+          item.update({ product: product, quantity: i.payload.val().quantity - 1});
+        } else {
+          item.remove();
+        }
+      }
+    });
+  }
+
   private getItem(cartId: string, productId: string) {
     return this.db.object('/shopping-carts/' + cartId + '/items/' + productId);
   }
@@ -38,7 +53,7 @@ export class ShoppingCartService {
     }
 
     const result = await this.create();
-    localStorage.setItem('cardId', result.key);
+    localStorage.setItem('cartId', result.key);
     return result.key;
   }
 
