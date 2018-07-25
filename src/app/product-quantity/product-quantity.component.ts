@@ -23,10 +23,12 @@ export class ProductQuantityComponent {
   }
 
   getQuantity() {
-    if (!this.shoppingCart) {
+    if (!this.shoppingCart || !this.shoppingCart.payload.val().items) {
       return 0;
     }
+
     const item = this.shoppingCart.payload.val().items[this.product.key];
+
     if (!item) {
       return 0;
     }

@@ -12,11 +12,12 @@ import { CartItem } from '../models/cart-item';
 })
 export class ShoppingCartComponent implements OnInit {
   cart$;
+  cart;
   subscription: Subscription;
   itemCount: number;
   cartProducts: {};
   cartItems: CartItem[];
-  displayedColumns: string[] = ['title', 'quantity', 'total-price'];
+  displayedColumns: string[] = ['thumbnail', 'title', 'quantity', 'pad', 'total-price'];
   totalPrice: number;
 
   constructor(private shoppingCartService: ShoppingCartService) { }
@@ -26,6 +27,7 @@ export class ShoppingCartComponent implements OnInit {
     this.subscription = this.cart$
       .subscribe(
         cart => {
+          this.cart = cart;
           this.cartItems = [];
           this.cartProducts = cart.payload.val().items;
           this.itemCount = 0;
@@ -40,14 +42,6 @@ export class ShoppingCartComponent implements OnInit {
       });
   }
 
-  getQuantity(product: Product) {
-    const item = this.cartProducts[product.key];
-    if (!item) {
-      return 0;
-    }
-    return item.quantity;
-  }
-
   getTotalPrice() {
     let total = 0;
 
@@ -57,5 +51,9 @@ export class ShoppingCartComponent implements OnInit {
       }
     }
     return total;
+  }
+
+  clearCart() {
+    this.shoppingCartService.clearCart();
   }
 }

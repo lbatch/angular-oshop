@@ -5,3 +5,14 @@ table {
   tr.mat-footer-row {
     font-weight: bold;
   }
+
+  .mat-cell, .mat-header-cell, .mat-footer-cell{
+    padding: 0 0 0 80px;
+  }
+
+  .thumbnail {
+    width: 80px;
+    height: 80px;
+    border-radius: 100px;
+    background-size: cover;
+  }

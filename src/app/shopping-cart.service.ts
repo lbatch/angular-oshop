@@ -10,6 +10,11 @@ export class ShoppingCartService {
 
   constructor(private db: AngularFireDatabase) { }
 
+  async getCart() {
+    const cartId = await this.getOrCreateCartId();
+    return this.db.object('/shopping-carts/' + cartId);
+  }
+
   async addToCart(product: Product) {
     const cartId = await this.getOrCreateCartId();
     const item = this.getItem(cartId, product.key);
@@ -37,13 +42,13 @@ export class ShoppingCartService {
     });
   }
 
-  private getItem(cartId: string, productId: string) {
-    return this.db.object('/shopping-carts/' + cartId + '/items/' + productId);
+  async clearCart() {
+    const cartId = await this.getOrCreateCartId();
+    this.db.object('/shopping-carts/' + cartId + '/items').remove();
   }
 
-  async getCart() {
-    const cartId = await this.getOrCreateCartId();
-    return this.db.object('/shopping-carts/' + cartId);
+  private getItem(cartId: string, productId: string) {
+    return this.db.object('/shopping-carts/' + cartId + '/items/' + productId);
   }
 
   private async getOrCreateCartId(): Promise<string> {
@@ -62,4 +67,5 @@ export class ShoppingCartService {
       dateCreated: new Date().getTime()
     });
   }
+
 }
