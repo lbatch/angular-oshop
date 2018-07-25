@@ -65,4 +65,5 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 }
 
-}
+
+
