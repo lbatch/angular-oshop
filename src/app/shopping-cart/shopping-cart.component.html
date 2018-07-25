@@ -1,3 +1,58 @@
-<p>
-  shopping-cart works!
-</p>
+<h1>Shopping Cart</h1>
+<ng-container *ngIf="cart$ | async as cart">
+  <p>
+    You have {{ itemCount }} items in your shopping cart.
+  </p>
+
+  <div class="mat-elevation-z8">
+
+      <table mat-table [dataSource]="cartItems">
+        <ng-container matColumnDef="thumbnail">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let row">
+            <div [style.backgroundImage] = "'url(' + row.product.value.imageUrl + ')'" class="thumbnail"></div>
+          </td>
+          <td mat-footer-cell *matFooterCellDef>Total</td>
+        </ng-container>
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>Title</th>
+          <td mat-cell *matCellDef="let row">{{ row.product.value.title }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+        <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef>Quantity</th>
+            <td mat-cell *matCellDef="let row">
+                <app-product-quantity [product]="row.product" [shopping-cart]="cart"></app-product-quantity>
+            </td>
+            <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+        <ng-container matColumnDef="pad">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row"></td>
+            <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef>Unit Price</th>
+          <td mat-cell *matCellDef="let row">{{ row.product.value.price | currency:'USD':symbol }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
+         </ng-container>
+         <ng-container matColumnDef="total-price">
+            <th mat-header-cell *matHeaderCellDef>Price</th>
+            <td mat-cell *matCellDef="let row">{{ row.totalPrice | currency:'USD':symbol }}</td>
+            <td mat-footer-cell *matFooterCellDef>{{ getTotalPrice() | currency:'USD':symbol }}</td>
+           </ng-container>
+         
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+      </table>
+      
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+      
+      </div>
+
+      <button 
+        (click)="clearCart()"
+        class="btn btn-danger btn-sm">Clear Shopping Cart</button>
+
+</ng-container>

@@ -14,16 +14,18 @@ export class ProductCardComponent {
   // tslint:disable-next-line:no-input-rename
   @Input('shopping-cart') shoppingCart;
 
-  constructor(private cartService: ShoppingCartService) { }
+  constructor(private cartService: ShoppingCartService) {
+   }
 
   addToCart(product: Product) {
     this.cartService.addToCart(product);
   }
 
   getQuantity() {
-    if (!this.shoppingCart) {
+    if (!this.shoppingCart || !this.shoppingCart.payload.val().items) {
       return 0;
     }
+
     const item = this.shoppingCart.payload.val().items[this.product.key];
     if (!item) {
       return 0;

@@ -11,6 +11,7 @@ import { Product } from '../models/product';
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css']
 })
+
 export class ProductsComponent implements OnInit, OnDestroy {
   products: Product[];
   filteredProducts: Product[];
@@ -22,13 +23,14 @@ export class ProductsComponent implements OnInit, OnDestroy {
   cartSnapshot: any;
 
   constructor(
-    route: ActivatedRoute,
-    productService: ProductService,
-    private shoppingCartService: ShoppingCartService) {
+    private route: ActivatedRoute,
+    private productService: ProductService,
+    private shoppingCartService: ShoppingCartService) {}
 
-    this.subscription = route.queryParamMap.subscribe(params => {
+  async ngOnInit() {
+    this.subscription = this.route.queryParamMap.subscribe(params => {
       this.category = params.get('category');
-      productService.getAll().pipe(
+      this.productService.getAll().pipe(
         map(products => {
           return products.map(product => <Product>({key: product.key, value: product.payload.val()}));
         })
@@ -39,9 +41,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
           this.products;
     });
   });
-}
 
-  async ngOnInit() {
     this.cartObj = await this.shoppingCartService.getCart();
     this.cartSubscription = this.cartObj.snapshotChanges().subscribe(c => {
       this.cart = c;
