@@ -1,7 +1,12 @@
 <h1>Shopping Cart</h1>
 <ng-container *ngIf="cart$ | async as cart">
   <p>
-    You have {{ itemCount }} items in your shopping cart.
+    You have {{ itemCount }} items in your shopping cart. 
+    <button 
+    *ngIf="cartItems.length"
+    (click)="clearCart()"
+    class="btn btn-light btn-sm">Clear Shopping Cart
+  </button>
   </p>
 
   <div class="mat-elevation-z8">
@@ -50,9 +55,16 @@
       <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
       
       </div>
-
-      <button 
-        (click)="clearCart()"
-        class="btn btn-danger btn-sm">Clear Shopping Cart</button>
+      <div>
+        <p></p>
+        <p>
+        <a 
+          *ngIf="cartItems.length"
+          routerLink="/checkout"
+          class="btn btn-primary">Check Out
+        </a>
+        </p>
+      </div>
+     
 
 </ng-container>
