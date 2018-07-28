@@ -1,9 +1,9 @@
 <h1>Shopping Cart</h1>
-<ng-container *ngIf="cart$ | async as cart">
+<ng-container *ngIf="cart">
   <p>
-    You have {{ itemCount }} items in your shopping cart. 
+    You have {{ cart.totalItemsCount }} items in your shopping cart. 
     <button 
-    *ngIf="cartItems.length"
+    *ngIf="cart.totalItemsCount"
     (click)="clearCart()"
     class="btn btn-light btn-sm">Clear Shopping Cart
   </button>
@@ -11,7 +11,7 @@
 
   <div class="mat-elevation-z8">
 
-      <table mat-table [dataSource]="cartItems">
+      <table mat-table [dataSource]="cart.items">
         <ng-container matColumnDef="thumbnail">
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let row">
@@ -44,7 +44,7 @@
          <ng-container matColumnDef="total-price">
             <th mat-header-cell *matHeaderCellDef>Price</th>
             <td mat-cell *matCellDef="let row">{{ row.totalPrice | currency:'USD':symbol }}</td>
-            <td mat-footer-cell *matFooterCellDef>{{ getTotalPrice() | currency:'USD':symbol }}</td>
+            <td mat-footer-cell *matFooterCellDef>{{ cart.totalPrice | currency:'USD':symbol }}</td>
            </ng-container>
          
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -59,7 +59,7 @@
         <p></p>
         <p>
         <a 
-          *ngIf="cartItems.length"
+          *ngIf="cart.totalItemsCount"
           routerLink="/checkout"
           class="btn btn-primary">Check Out
         </a>
