@@ -24,13 +24,13 @@ export class BsNavbarComponent implements OnInit {
 
  async ngOnInit() {
   this.auth.appUser$.subscribe(appUser => this.appUser = appUser);
-  const cart$ = (await this.shoppingCartService.getCart()).snapshotChanges();
+  const cart$ = (await this.shoppingCartService.getCart());
   cart$.subscribe(cart => {
 
     this.shoppingCartItemCount = 0;
     // tslint:disable-next-line:forin
-    for (const productId in cart.payload.val().items) {
-      this.shoppingCartItemCount += cart.payload.val().items[productId].quantity;
+    for (const productId in cart.items) {
+      this.shoppingCartItemCount += cart.items[productId].quantity;
     }
   });
 

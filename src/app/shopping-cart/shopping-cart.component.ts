@@ -1,56 +1,35 @@
+import { ShoppingCart } from './../models/shopping-cart';
 import { map } from 'rxjs/operators';
 import { Product } from './../models/product';
 import { Subscription } from 'rxjs';
 import { ShoppingCartService } from './../shopping-cart.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CartItem } from '../models/cart-item';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-shopping-cart',
   templateUrl: './shopping-cart.component.html',
   styleUrls: ['./shopping-cart.component.css']
 })
-export class ShoppingCartComponent implements OnInit {
-  cart$;
-  cart;
+export class ShoppingCartComponent implements OnInit, OnDestroy {
+  cart$: Observable<ShoppingCart>;
+  cart: ShoppingCart;
   subscription: Subscription;
-  itemCount: number;
-  cartProducts: {};
-  cartItems: CartItem[];
   displayedColumns: string[] = ['thumbnail', 'title', 'quantity', 'pad', 'total-price'];
-  totalPrice: number;
 
   constructor(private shoppingCartService: ShoppingCartService) { }
 
   async ngOnInit() {
-    this.cart$ = (await this.shoppingCartService.getCart()).snapshotChanges();
-    this.subscription = this.cart$
-      .subscribe(
-        cart => {
-          this.cart = cart;
-          this.cartItems = [];
-          this.cartProducts = cart.payload.val().items;
-          this.itemCount = 0;
-          // tslint:disable-next-line:forin
-          for (const productId in this.cartProducts) {
-            this.itemCount += this.cartProducts[productId].quantity;
-            this.cartItems
-             .push(new CartItem(
-              ({ key: productId, value: this.cartProducts[productId].product.value}),
-                this.cartProducts[productId].quantity));
-        }
-      });
+    this.cart$ = await this.shoppingCartService.getCart();
+    this.subscription = this.cart$.subscribe(c => {
+      this.cart = c;
+      console.log(this.cart);
+    });
   }
 
-  getTotalPrice() {
-    let total = 0;
-
-    for (const i of this.cartItems) {
-      if (i.totalPrice) {
-        total += i.totalPrice;
-      }
-    }
-    return total;
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   clearCart() {

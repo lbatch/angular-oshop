@@ -11,7 +11,7 @@ import { switchMap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-  user$: Observable<firebase.User>;
+  public user$: Observable<firebase.User>;
 
   constructor(private afAuth: AngularFireAuth, private route: ActivatedRoute, private userService: UserService) {
     this.user$ = afAuth.authState;
@@ -37,4 +37,5 @@ export class AuthService {
         return of(null);
       }));
   }
+
 }

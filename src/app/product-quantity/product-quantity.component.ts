@@ -1,6 +1,7 @@
 import { ShoppingCartService } from './../shopping-cart.service';
 import { Product } from './../models/product';
 import { Component, OnInit, Input } from '@angular/core';
+import { ShoppingCart } from '../models/shopping-cart';
 
 @Component({
   selector: 'app-product-quantity',
@@ -10,7 +11,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class ProductQuantityComponent {
   @Input('product') product: Product;
   // tslint:disable-next-line:no-input-rename
-  @Input('shopping-cart') shoppingCart;
+  @Input('shopping-cart') shoppingCart: ShoppingCart;
 
   constructor(private cartService: ShoppingCartService) { }
 
@@ -23,16 +24,7 @@ export class ProductQuantityComponent {
   }
 
   getQuantity() {
-    if (!this.shoppingCart || !this.shoppingCart.payload.val().items) {
-      return 0;
-    }
-
-    const item = this.shoppingCart.payload.val().items[this.product.key];
-
-    if (!item) {
-      return 0;
-    }
-    return item.quantity;
+    return this.shoppingCart.getQuantity(this.product);
   }
 
 }

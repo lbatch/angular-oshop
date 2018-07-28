@@ -1,10 +1,11 @@
 import { ShoppingCartService } from './../shopping-cart.service';
 import { map } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from './../product.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Product } from '../models/product';
+import { ShoppingCart } from '../models/shopping-cart';
 
 @Component({
   selector: 'app-products',
@@ -13,14 +14,13 @@ import { Product } from '../models/product';
 })
 
 export class ProductsComponent implements OnInit, OnDestroy {
-  products: Product[];
-  filteredProducts: Product[];
+  products: Product[] = [];
+  filteredProducts: Product[] = [];
   category: string;
+  cart$: Observable<ShoppingCart>;
+  cart: ShoppingCart;
   subscription: Subscription;
   cartSubscription: Subscription;
-  cartObj: any;
-  cart: any;
-  cartSnapshot: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -42,8 +42,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
     });
   });
 
-    this.cartObj = await this.shoppingCartService.getCart();
-    this.cartSubscription = this.cartObj.snapshotChanges().subscribe(c => {
+    this.cart$ = await this.shoppingCartService.getCart();
+    this.cartSubscription = this.cart$.subscribe(c => {
       this.cart = c;
     });
   }
