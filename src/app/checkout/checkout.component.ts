@@ -5,6 +5,8 @@ import { ShoppingCartService } from './../shopping-cart.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
 import { ShoppingCart } from '../models/shopping-cart';
+import { Order } from '../models/order';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-checkout',
@@ -23,13 +25,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   constructor(
     private shoppingCartService: ShoppingCartService,
     private orderService: OrderService,
-    private authService: AuthService) {}
+    private authService: AuthService,
+    private router: Router) {}
 
   async ngOnInit() {
     const cart$ = (await this.shoppingCartService.getCart());
     this.cartSubscription = cart$.subscribe(cart => this.cart = cart);
-
-    this.authService.user$.subscribe(user => this.userId = user.uid);
+    this.userSubscription = this.authService.user$.subscribe(user => this.userId = user.uid);
   }
 
   ngOnDestroy() {
@@ -37,33 +39,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.userSubscription.unsubscribe();
   }
 
-  placeOrder() {
-    const cartItems = this.cart.items;
-    const shipItems = [];
-    for (const item in cartItems) {
-      if (cartItems[item]) {
-        shipItems
-        .push({
-         product: {
-           title: cartItems[item].product.value.title,
-           imageUrl: cartItems[item].product.value.imageUrl,
-           price: cartItems[item].product.value.price
-         },
-         quantity: cartItems[item].quantity,
-         totalPrice: (cartItems[item].product.value.price * cartItems[item].quantity)
-       });
-      }
-    }
-
-    const order = {
-      userId: this.userId,
-      datePlaced: new Date().getTime(),
-      shipping: this.shipping,
-      items: shipItems
-    };
-
-    this.orderService.storeOrder(order);
-
+  async placeOrder() {
+    const order = new Order(this.userId, this.shipping, this.cart);
+    const result = await this.orderService.placeOrder(order);
+    this.router.navigate(['/order-success', result.key]);
   }
 }
 
