@@ -2,7 +2,7 @@
 # Oshop
 
 Store website created in Angular during the Udemy Complete Angular Master Class (Mosh Hamedani) course.
-Course included guiding videos for project, but substantial adaptations were required to use the most recent versions of Angular, Bootstrap, and angularfire2.
+Course included guiding videos for project, but adaptations were required to use the most recent versions of Angular, Bootstrap, and angularfire2.
 
 
 
