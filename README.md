@@ -1,6 +1,11 @@
 <<<<<<< HEAD
 # Oshop
 
+Store website created in Angular during the Udemy Complete Angular Master Class (Mosh Hamedani) course.
+Course included guiding videos for project, but allowed flexibility and required substantial changes to use the most recent versions of Angular and Firebase.
+
+
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 
 ## Development server
